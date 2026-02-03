@@ -4,9 +4,8 @@
 <meta charset="UTF-8">
 <title>Valentine</title>
 
-<link rel="icon" type="image/png" href="favicon.png">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="favicon.png">
 
 <style>
 * {
@@ -22,7 +21,7 @@ body {
   color: white;
 }
 
-/* Background video */
+/* Background */
 video {
   position: fixed;
   inset: 0;
@@ -32,8 +31,6 @@ video {
   filter: blur(20px) brightness(0.7);
   z-index: -2;
 }
-
-/* Overlay */
 .overlay {
   position: fixed;
   inset: 0;
@@ -41,95 +38,96 @@ video {
   z-index: -1;
 }
 
-/* Loader */
-.loader {
-  position: fixed;
+/* ===== LETTER SCENE ===== */
+.letter-scene {
+  position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.55);
-  z-index: 10;
 }
 
-/* Moon loader */
-.moon {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  background: #fff;
+.envelope {
+  width: 300px;
+  height: 200px;
   position: relative;
-  overflow: hidden;
+  cursor: pointer;
 }
 
-.moon::after {
-  content: "";
+.envelope-base {
   position: absolute;
   inset: 0;
-  background: #000;
-  border-radius: 50%;
-  animation: phase 2.5s ease-in-out infinite;
+  background: #f2f2f2;
+  border-radius: 16px;
 }
 
-@keyframes phase {
-  0% { transform: translateX(100%); }
-  50% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
-}
-
-/* Layout containers */
-.card, .success {
+.envelope-flap {
   position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Glass card */
-.card-inner, .success-inner {
-  background: rgba(255,255,255,0.14);
-  backdrop-filter: blur(26px);
-  border-radius: 30px;
-  padding: 48px 42px;
-  width: min(92vw, 420px);
-  text-align: center;
-  box-shadow: 0 35px 80px rgba(0,0,0,0.45);
-}
-
-/* Text sizing */
-.card-inner h1 {
-  font-size: clamp(2rem, 5vw, 2.4rem);
-  font-weight: 600;
-  line-height: 1.25;
-  margin-bottom: 28px;
-}
-
-.success-inner h2 {
-  font-size: clamp(2.1rem, 5vw, 2.5rem);
-  font-weight: 600;
-  line-height: 1.25;
-  margin-bottom: 28px;
-}
-
-/* Images */
-.card-inner img,
-.success-inner img {
+  top: 0;
+  left: 0;
   width: 100%;
-  border-radius: 22px;
-  margin-bottom: 32px;
+  height: 100%;
+  background: #e0e0e0;
+  clip-path: polygon(0 0, 50% 55%, 100% 0);
+  transform-origin: top;
+  transition: transform 0.8s ease;
+}
+
+.letter {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 92%;
+  height: 170px;
+  background: rgba(255,255,255,0.12);
+  backdrop-filter: blur(20px);
+  border-radius: 14px;
+  padding: 22px;
+  opacity: 0;
+  transition: transform 1s ease, opacity 0.6s ease;
+}
+
+.envelope.open .envelope-flap {
+  transform: rotateX(180deg);
+}
+
+.envelope.open .letter {
+  transform: translate(-50%, -140px);
+  opacity: 1;
+}
+
+.tap-text {
+  margin-top: 22px;
+  font-size: 1rem;
+  opacity: 0.8;
+  text-align: center;
+}
+
+/* ===== QUESTION CARD (INSIDE LETTER) ===== */
+.letter h1 {
+  font-size: 1.6rem;
+  line-height: 1.3;
+  margin-bottom: 18px;
+  color: white;
+}
+
+.letter img {
+  width: 100%;
+  border-radius: 14px;
+  margin-bottom: 18px;
 }
 
 /* Buttons */
 .buttons {
   position: relative;
-  height: 78px;
+  height: 70px;
 }
 
 button {
-  padding: 16px 42px;
-  font-size: 1.05rem;
-  border-radius: 44px;
+  padding: 14px 36px;
+  font-size: 1rem;
+  border-radius: 40px;
   border: none;
   cursor: pointer;
   position: absolute;
@@ -153,9 +151,32 @@ button {
   right: 0;
 }
 
-/* Success page */
+/* ===== SUCCESS ===== */
 .success {
   display: none;
+  position: absolute;
+  inset: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.success-inner {
+  background: rgba(255,255,255,0.14);
+  backdrop-filter: blur(26px);
+  border-radius: 30px;
+  padding: 48px 42px;
+  width: min(92vw, 420px);
+  text-align: center;
+}
+
+.success-inner h2 {
+  font-size: 2.3rem;
+  margin-bottom: 28px;
+}
+
+.success-inner img {
+  width: 100%;
+  border-radius: 22px;
 }
 
 /* Toast */
@@ -170,46 +191,45 @@ button {
   font-size: 1rem;
   opacity: 0;
   transition: opacity 0.3s ease;
-  z-index: 20;
 }
-.toast.show {
-  opacity: 1;
-}
+.toast.show { opacity: 1; }
 </style>
 </head>
 
 <body>
 
-<!-- Background -->
 <video autoplay muted loop playsinline>
   <source src="bg.mp4" type="video/mp4">
 </video>
 <div class="overlay"></div>
 
-<!-- Music -->
 <audio id="music" loop>
   <source src="song.mp3" type="audio/mpeg">
 </audio>
 
-<!-- Loader -->
-<div class="loader" id="loader">
-  <div class="moon"></div>
-</div>
+<!-- LETTER -->
+<div class="letter-scene" id="scene">
+  <div>
+    <div class="envelope" id="envelope">
+      <div class="envelope-base"></div>
+      <div class="envelope-flap"></div>
 
-<!-- Question -->
-<div class="card" id="main" style="display:none;">
-  <div class="card-inner">
-    <h1>Hey Riddhi,<br>will you be my Valentine?</h1>
-    <img src="question.png" alt="Memory">
+      <div class="letter">
+        <h1>Hey Riddhi,<br>will you be my Valentine?</h1>
+        <img src="question.png" alt="Memory">
 
-    <div class="buttons">
-      <button id="yes">Yes</button>
-      <button id="no">No</button>
+        <div class="buttons">
+          <button id="yes">Yes</button>
+          <button id="no">No</button>
+        </div>
+      </div>
     </div>
+
+    <div class="tap-text" id="tapText">Tap to open</div>
   </div>
 </div>
 
-<!-- YES -->
+<!-- SUCCESS -->
 <div class="success" id="success">
   <div class="success-inner">
     <h2>I knew you’d say yes, baby.</h2>
@@ -220,71 +240,58 @@ button {
 <div class="toast" id="toast">Riddiculous. Think again.</div>
 
 <script>
-const loader = document.getElementById("loader");
-const main = document.getElementById("main");
+const envelope = document.getElementById("envelope");
+const tapText = document.getElementById("tapText");
 const success = document.getElementById("success");
 const noBtn = document.getElementById("no");
 const yesBtn = document.getElementById("yes");
 const toast = document.getElementById("toast");
 const music = document.getElementById("music");
 
-let musicStarted = false;
+let opened = false;
 
-// Start music on first interaction
-function startMusic() {
-  if (!musicStarted) {
-    music.volume = 0.4;
-    music.play().catch(() => {});
-    musicStarted = true;
-    document.removeEventListener("mousemove", startMusic);
-    document.removeEventListener("click", startMusic);
-    document.removeEventListener("touchstart", startMusic);
-  }
-}
+// Open letter
+envelope.addEventListener("click", () => {
+  if (opened) return;
+  opened = true;
+  envelope.classList.add("open");
+  tapText.style.opacity = 0;
+});
 
-document.addEventListener("mousemove", startMusic);
-document.addEventListener("click", startMusic);
-document.addEventListener("touchstart", startMusic);
-
-// Loader delay
-setTimeout(() => {
-  loader.style.display = "none";
-  main.style.display = "flex";
-}, 2500);
-
-// Subtle NO dodge (micro-movement)
+// NO micro-dodge
 document.addEventListener("mousemove", (e) => {
   const rect = noBtn.getBoundingClientRect();
-  const btnX = rect.left + rect.width / 2;
-  const btnY = rect.top + rect.height / 2;
-
-  const distance = Math.hypot(e.clientX - btnX, e.clientY - btnY);
+  const dx = e.clientX - (rect.left + rect.width / 2);
+  const dy = e.clientY - (rect.top + rect.height / 2);
+  const distance = Math.hypot(dx, dy);
 
   if (distance < 60) {
     const angle = Math.random() * Math.PI * 2;
-    const offset = 12 + Math.random() * 18;
+    const offset = 12 + Math.random() * 16;
 
-    let newX = rect.left + Math.cos(angle) * offset;
-    let newY = rect.top + Math.sin(angle) * offset;
+    let x = rect.left + Math.cos(angle) * offset;
+    let y = rect.top + Math.sin(angle) * offset;
 
-    newX = Math.max(10, Math.min(window.innerWidth - rect.width - 10, newX));
-    newY = Math.max(10, Math.min(window.innerHeight - rect.height - 10, newY));
+    x = Math.max(10, Math.min(window.innerWidth - rect.width - 10, x));
+    y = Math.max(10, Math.min(window.innerHeight - rect.height - 10, y));
 
     noBtn.style.position = "fixed";
-    noBtn.style.left = newX + "px";
-    noBtn.style.top = newY + "px";
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
   }
 });
 
-// NO click message
+// NO click
 noBtn.addEventListener("click", () => {
   toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 1800);
+  setTimeout(() => toast.classList.remove("show"), 1600);
 });
 
-// YES click
+// YES
 yesBtn.addEventListener("click", () => {
-  main.style.display = "none";
+  music.volume = 0.5;
+  music.play().catch(()=>{});
+  document.getElementById("scene").style.display = "none";
   success.style.display = "flex";
 });
 </script>
