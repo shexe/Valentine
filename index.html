@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>Valentine</title>
 
+<link rel="icon" type="image/png" href="favicon.png">
+
 <style>
 * {
   margin: 0;
@@ -68,8 +70,8 @@ video {
 }
 
 @keyframes phase {
-  0%   { transform: translateX(100%); }
-  50%  { transform: translateX(0); }
+  0% { transform: translateX(100%); }
+  50% { transform: translateX(0); }
   100% { transform: translateX(-100%); }
 }
 
@@ -117,7 +119,7 @@ button {
   border: none;
   cursor: pointer;
   position: absolute;
-  transition: all 0.35s ease;
+  transition: transform 0.15s ease;
 }
 
 #yes {
@@ -153,6 +155,24 @@ button {
   border-radius: 22px;
   box-shadow: 0 25px 50px rgba(0,0,0,0.5);
 }
+
+/* Toast message */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.7);
+  padding: 12px 22px;
+  border-radius: 30px;
+  font-size: 0.95rem;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 20;
+}
+.toast.show {
+  opacity: 1;
+}
 </style>
 </head>
 
@@ -163,6 +183,11 @@ button {
   <source src="bg.mp4" type="video/mp4">
 </video>
 <div class="overlay"></div>
+
+<!-- Background Music -->
+<audio id="music" loop>
+  <source src="song.mp3" type="audio/mpeg">
+</audio>
 
 <!-- Loader -->
 <div class="loader" id="loader">
@@ -182,7 +207,7 @@ button {
   </div>
 </div>
 
-<!-- YES page -->
+<!-- YES -->
 <div class="success" id="success">
   <div class="success-inner">
     <h2>I knew you’d say yes, baby.</h2>
@@ -190,28 +215,42 @@ button {
   </div>
 </div>
 
+<div class="toast" id="toast">Riddiculous. Think again.</div>
+
 <script>
 const loader = document.getElementById("loader");
 const main = document.getElementById("main");
 const success = document.getElementById("success");
 const noBtn = document.getElementById("no");
 const yesBtn = document.getElementById("yes");
+const toast = document.getElementById("toast");
+const music = document.getElementById("music");
 
-// Show page after loading
+let musicStarted = false;
+
+// Start music on first interaction
+function startMusic() {
+  if (!musicStarted) {
+    music.volume = 0.4;
+    music.play().catch(() => {});
+    musicStarted = true;
+    document.removeEventListener("mousemove", startMusic);
+    document.removeEventListener("click", startMusic);
+    document.removeEventListener("touchstart", startMusic);
+  }
+}
+
+document.addEventListener("mousemove", startMusic);
+document.addEventListener("click", startMusic);
+document.addEventListener("touchstart", startMusic);
+
+// Loader delay
 setTimeout(() => {
   loader.style.display = "none";
   main.style.display = "flex";
 }, 2500);
 
-// Save original NO position (relative to viewport)
-const original = {
-  x: noBtn.getBoundingClientRect().left,
-  y: noBtn.getBoundingClientRect().top
-};
-
-let escaped = false;
-
-// Cursor proximity detection (FULL SCREEN)
+// Subtle NO dodge
 document.addEventListener("mousemove", (e) => {
   const rect = noBtn.getBoundingClientRect();
   const btnX = rect.left + rect.width / 2;
@@ -219,27 +258,26 @@ document.addEventListener("mousemove", (e) => {
 
   const distance = Math.hypot(e.clientX - btnX, e.clientY - btnY);
 
-  if (distance < 90 && !escaped) {
-    escaped = true;
+  if (distance < 60) {
+    const angle = Math.random() * Math.PI * 2;
+    const offset = 15 + Math.random() * 15;
 
-    const maxX = window.innerWidth - rect.width - 20;
-    const maxY = window.innerHeight - rect.height - 20;
+    let newX = rect.left + Math.cos(angle) * offset;
+    let newY = rect.top + Math.sin(angle) * offset;
 
-    const randomX = Math.random() * maxX;
-    const randomY = Math.random() * maxY;
+    newX = Math.max(10, Math.min(window.innerWidth - rect.width - 10, newX));
+    newY = Math.max(10, Math.min(window.innerHeight - rect.height - 10, newY));
 
     noBtn.style.position = "fixed";
-    noBtn.style.left = randomX + "px";
-    noBtn.style.top = randomY + "px";
+    noBtn.style.left = newX + "px";
+    noBtn.style.top = newY + "px";
   }
 });
 
-// Return to original position
-document.addEventListener("mouseleave", () => {
-  escaped = false;
-  noBtn.style.position = "absolute";
-  noBtn.style.left = "";
-  noBtn.style.top = "";
+// NO click message
+noBtn.addEventListener("click", () => {
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 1800);
 });
 
 // YES click
