@@ -6,6 +6,8 @@
 
 <link rel="icon" type="image/png" href="favicon.png">
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 * {
   margin: 0;
@@ -75,7 +77,7 @@ video {
   100% { transform: translateX(-100%); }
 }
 
-/* Glass cards */
+/* Layout containers */
 .card, .success {
   position: absolute;
   inset: 0;
@@ -84,38 +86,50 @@ video {
   justify-content: center;
 }
 
+/* Glass card */
 .card-inner, .success-inner {
-  background: rgba(255,255,255,0.12);
-  backdrop-filter: blur(25px);
-  border-radius: 28px;
-  padding: 40px;
-  width: 360px;
+  background: rgba(255,255,255,0.14);
+  backdrop-filter: blur(26px);
+  border-radius: 30px;
+  padding: 48px 42px;
+  width: min(92vw, 420px);
   text-align: center;
-  box-shadow: 0 30px 70px rgba(0,0,0,0.45);
+  box-shadow: 0 35px 80px rgba(0,0,0,0.45);
 }
 
+/* Text sizing */
 .card-inner h1 {
-  font-size: 2rem;
+  font-size: clamp(2rem, 5vw, 2.4rem);
   font-weight: 600;
-  margin-bottom: 25px;
+  line-height: 1.25;
+  margin-bottom: 28px;
 }
 
-.card-inner img {
+.success-inner h2 {
+  font-size: clamp(2.1rem, 5vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.25;
+  margin-bottom: 28px;
+}
+
+/* Images */
+.card-inner img,
+.success-inner img {
   width: 100%;
-  border-radius: 18px;
-  margin-bottom: 30px;
+  border-radius: 22px;
+  margin-bottom: 32px;
 }
 
 /* Buttons */
 .buttons {
   position: relative;
-  height: 70px;
+  height: 78px;
 }
 
 button {
-  padding: 14px 36px;
-  font-size: 1rem;
-  border-radius: 40px;
+  padding: 16px 42px;
+  font-size: 1.05rem;
+  border-radius: 44px;
   border: none;
   cursor: pointer;
   position: absolute;
@@ -135,37 +149,25 @@ button {
 #no {
   background: transparent;
   color: white;
-  border: 1px solid rgba(255,255,255,0.4);
+  border: 1px solid rgba(255,255,255,0.45);
   right: 0;
 }
 
-/* Success */
+/* Success page */
 .success {
   display: none;
 }
 
-.success-inner h2 {
-  font-size: 2.2rem;
-  font-weight: 600;
-  margin-bottom: 25px;
-}
-
-.success-inner img {
-  width: 100%;
-  border-radius: 22px;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-}
-
-/* Toast message */
+/* Toast */
 .toast {
   position: fixed;
-  bottom: 30px;
+  bottom: 28px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0,0,0,0.7);
-  padding: 12px 22px;
-  border-radius: 30px;
-  font-size: 0.95rem;
+  background: rgba(0,0,0,0.75);
+  padding: 14px 26px;
+  border-radius: 32px;
+  font-size: 1rem;
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 20;
@@ -184,7 +186,7 @@ button {
 </video>
 <div class="overlay"></div>
 
-<!-- Background Music -->
+<!-- Music -->
 <audio id="music" loop>
   <source src="song.mp3" type="audio/mpeg">
 </audio>
@@ -250,7 +252,7 @@ setTimeout(() => {
   main.style.display = "flex";
 }, 2500);
 
-// Subtle NO dodge
+// Subtle NO dodge (micro-movement)
 document.addEventListener("mousemove", (e) => {
   const rect = noBtn.getBoundingClientRect();
   const btnX = rect.left + rect.width / 2;
@@ -260,7 +262,7 @@ document.addEventListener("mousemove", (e) => {
 
   if (distance < 60) {
     const angle = Math.random() * Math.PI * 2;
-    const offset = 15 + Math.random() * 15;
+    const offset = 12 + Math.random() * 18;
 
     let newX = rect.left + Math.cos(angle) * offset;
     let newY = rect.top + Math.sin(angle) * offset;
