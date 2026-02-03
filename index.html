@@ -8,14 +8,14 @@
 
 <style>
 :root {
-  --glass: rgba(255,255,255,0.18);
-  --border: rgba(255,255,255,0.28);
+  --accent1: #ff7eb3;
+  --accent2: #ff4f8b;
+  --glass: rgba(255,255,255,0.2);
+  --border: rgba(255,255,255,0.3);
   --shadow-lg: 0 40px 90px rgba(0,0,0,0.45);
   --shadow-sm: 0 14px 35px rgba(0,0,0,0.35);
-  --accent: #ff5fa2;
 }
 
-/* RESET */
 * {
   margin: 0;
   padding: 0;
@@ -59,29 +59,30 @@ video {
 }
 
 .loader-inner {
-  text-align: center;
-  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
 }
 
-/* MOON WITH TEXTURE */
+/* REALISTIC MOON */
 .moon {
-  width: 128px;
-  height: 128px;
-  margin: 0 auto 28px;
+  width: 140px;
+  height: 140px;
   border-radius: 50%;
   position: relative;
   overflow: hidden;
 
   background:
-    radial-gradient(circle at 30% 30%, #fff 0%, #e6e6e6 35%, #bcbcbc 65%, #9a9a9a 100%),
-    radial-gradient(circle at 70% 60%, rgba(0,0,0,0.15) 6%, transparent 7%),
-    radial-gradient(circle at 40% 75%, rgba(0,0,0,0.12) 5%, transparent 6%),
-    radial-gradient(circle at 65% 35%, rgba(0,0,0,0.1) 4%, transparent 5%);
+    radial-gradient(circle at 30% 30%, #ffffff, #e6e6e6 40%, #b5b5b5 70%, #9a9a9a 100%),
+    radial-gradient(circle at 40% 65%, rgba(0,0,0,0.18) 7%, transparent 8%),
+    radial-gradient(circle at 60% 40%, rgba(0,0,0,0.15) 6%, transparent 7%),
+    radial-gradient(circle at 70% 70%, rgba(0,0,0,0.12) 5%, transparent 6%);
 
   box-shadow:
-    inset -20px -20px 40px rgba(0,0,0,0.45),
-    inset 12px 12px 28px rgba(255,255,255,0.15),
-    0 0 60px rgba(255,255,255,0.18);
+    inset -22px -22px 40px rgba(0,0,0,0.45),
+    inset 10px 10px 28px rgba(255,255,255,0.12),
+    0 0 70px rgba(255,255,255,0.2);
 }
 
 .moon::after {
@@ -99,37 +100,34 @@ video {
   100% { transform: translateX(-100%); }
 }
 
-/* LOADER TEXT */
 .loader-text {
   font-size: 1.15rem;
   font-weight: 500;
   letter-spacing: 0.02em;
   opacity: 0.85;
-  margin-bottom: 22px;
 }
 
 /* HYDRATED BUTTON */
 .hydrated-btn {
-  display: block;
-  margin: 0 auto;
+  align-self: center;
   padding: 14px 44px;
   border-radius: 999px;
   border: none;
   cursor: pointer;
   font-size: 1rem;
   color: white;
-  background: linear-gradient(135deg, #ff7eb3, #ff4f8b);
+  background: linear-gradient(135deg, var(--accent1), var(--accent2));
   box-shadow:
     0 14px 30px rgba(255,79,139,0.45),
     inset 0 1px 0 rgba(255,255,255,0.4);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.25s ease;
 }
 
 .hydrated-btn:hover {
   transform: translateY(-2px) scale(1.05);
 }
 
-/* ===== MAIN LAYOUT ===== */
+/* ===== MAIN CARD ===== */
 .card, .success {
   position: absolute;
   inset: 0;
@@ -144,7 +142,7 @@ video {
   border-radius: 32px;
   background: linear-gradient(
     180deg,
-    rgba(255,255,255,0.24),
+    rgba(255,255,255,0.25),
     rgba(255,255,255,0.1)
   );
   backdrop-filter: blur(30px);
@@ -153,20 +151,15 @@ video {
   text-align: center;
 }
 
-/* TEXT */
-h1 {
-  font-size: clamp(2.2rem, 5vw, 2.6rem);
+h1, h2 {
   font-weight: 600;
   line-height: 1.25;
   margin-bottom: 28px;
 }
 
-h2 {
-  font-size: clamp(2.3rem, 5vw, 2.7rem);
-  margin-bottom: 26px;
-}
+h1 { font-size: 2.4rem; }
+h2 { font-size: 2.6rem; }
 
-/* IMAGES */
 .card-inner img {
   width: 100%;
   border-radius: 24px;
@@ -192,53 +185,45 @@ button {
   padding: 16px 44px;
   font-size: 1.05rem;
   border-radius: 999px;
-  cursor: pointer;
   border: none;
+  cursor: pointer;
   transition: transform 0.25s ease;
 }
 
-/* YES */
 #yes {
   left: 0;
-  background: linear-gradient(135deg, #ff7eb3, #ff4f8b);
+  background: linear-gradient(135deg, var(--accent1), var(--accent2));
   color: white;
-  box-shadow:
-    0 12px 28px rgba(255,79,139,0.45),
-    inset 0 1px 0 rgba(255,255,255,0.45);
 }
 
-/* NO (SHY) */
 #no {
   right: 0;
-  background: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.2);
   color: white;
   border: 1px solid rgba(255,255,255,0.35);
-  backdrop-filter: blur(10px);
 }
 
-/* SUCCESS */
-.success {
-  display: none;
-}
-
+/* DOWNLOAD – MATCHES YES */
 .download-btn {
   display: inline-block;
-  padding: 14px 36px;
+  padding: 16px 44px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #ffffff, #eaeaea);
-  color: #111;
+  background: linear-gradient(135deg, var(--accent1), var(--accent2));
+  color: white;
   text-decoration: none;
   font-weight: 500;
-  box-shadow: var(--shadow-sm);
+  box-shadow:
+    0 14px 30px rgba(255,79,139,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.4);
 }
 
-/* MUTE */
+/* MUTE – TRUE CIRCLE */
 .mute-btn {
   position: fixed;
   bottom: 22px;
   right: 22px;
-  width: 52px;
-  height: 52px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   display: none;
   align-items: center;
@@ -249,7 +234,6 @@ button {
   color: white;
   font-size: 1.2rem;
   cursor: pointer;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
 }
 
 /* TOAST */
@@ -287,7 +271,7 @@ button {
   </div>
 </div>
 
-<!-- QUESTION -->
+<!-- MAIN -->
 <div class="card" id="main" style="display:none;">
   <div class="card-inner">
     <h1>Hey Riddhi,<br>will you be my Valentine?</h1>
@@ -300,7 +284,7 @@ button {
 </div>
 
 <!-- SUCCESS -->
-<div class="success" id="success">
+<div class="success" id="success" style="display:none;">
   <div class="success-inner">
     <h2>I knew you’d say yes, baby.</h2>
     <img src="yes.png" />
@@ -344,10 +328,8 @@ wrap.addEventListener("mousemove", e => {
   const dist = Math.hypot(dx, dy);
 
   if (dist < 80) {
-    const factor = Math.min(1, (80 - dist) / 80);
-    const moveX = -dx * factor * 0.18;
-    const moveY = -dy * factor * 0.18;
-    noBtn.style.transform = `translate(${moveX}px, ${moveY}px)`;
+    const strength = (80 - dist) / 80;
+    noBtn.style.transform = `translate(${-dx * strength * 0.18}px, ${-dy * strength * 0.18}px)`;
   }
 });
 
