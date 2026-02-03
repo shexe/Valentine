@@ -214,7 +214,7 @@ button {
   <source src="song.mp3" type="audio/mpeg">
 </audio>
 
-<audio id="songLoad" loop>
+<audio id="song2" loop>
   <source src="song2.mp3" type="audio/mpeg">
 </audio>
 
@@ -262,30 +262,28 @@ const toast = document.getElementById("toast");
 const muteBtn = document.getElementById("muteBtn");
 
 const songYes = document.getElementById("songYes");
-const songLoad = document.getElementById("songLoad");
+const song2 = document.getElementById("song2");
 
 let song2Started = false;
 
-/* Loader ends → show question + start song2 on first interaction */
+/* Loader ends → show YES/NO page */
 setTimeout(() => {
   loader.style.display = "none";
   main.style.display = "flex";
-
-  // Wait for first user interaction AFTER loader
-  const startSong2 = () => {
-    if (!song2Started) {
-      songLoad.volume = 0.45;
-      songLoad.play().catch(()=>{});
-      song2Started = true;
-    }
-    document.removeEventListener("click", startSong2);
-    document.removeEventListener("touchstart", startSong2);
-  };
-
-  document.addEventListener("click", startSong2);
-  document.addEventListener("touchstart", startSong2);
-
 }, 2800);
+
+/* Start song2 on FIRST interaction on YES/NO page */
+function startSong2() {
+  if (!song2Started && main.style.display === "flex") {
+    song2.volume = 0.45;
+    song2.play().catch(()=>{});
+    song2Started = true;
+  }
+}
+
+document.addEventListener("click", startSong2);
+document.addEventListener("mousemove", startSong2);
+document.addEventListener("touchstart", startSong2);
 
 /* NO micro-dodge */
 document.addEventListener("mousemove", (e) => {
@@ -318,8 +316,8 @@ noBtn.addEventListener("click", () => {
 
 /* YES click */
 yesBtn.addEventListener("click", () => {
-  songLoad.pause();
-  songLoad.currentTime = 0;
+  song2.pause();
+  song2.currentTime = 0;
 
   songYes.volume = 0.55;
   songYes.play().catch(()=>{});
