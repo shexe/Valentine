@@ -40,7 +40,7 @@ video {
   z-index: -1;
 }
 
-/* ===== LOADER ===== */
+/* ===== MOON LOADER ===== */
 .loader {
   position: fixed;
   inset: 0;
@@ -264,23 +264,30 @@ const muteBtn = document.getElementById("muteBtn");
 const songYes = document.getElementById("songYes");
 const songLoad = document.getElementById("songLoad");
 
-// Start loading music on first interaction
-let loadStarted = false;
-document.addEventListener("click", () => {
-  if (!loadStarted) {
-    songLoad.volume = 0.45;
-    songLoad.play().catch(()=>{});
-    loadStarted = true;
-  }
-}, { once: true });
+let song2Started = false;
 
-// Loader delay
+/* Loader ends → show question + start song2 on first interaction */
 setTimeout(() => {
   loader.style.display = "none";
   main.style.display = "flex";
+
+  // Wait for first user interaction AFTER loader
+  const startSong2 = () => {
+    if (!song2Started) {
+      songLoad.volume = 0.45;
+      songLoad.play().catch(()=>{});
+      song2Started = true;
+    }
+    document.removeEventListener("click", startSong2);
+    document.removeEventListener("touchstart", startSong2);
+  };
+
+  document.addEventListener("click", startSong2);
+  document.addEventListener("touchstart", startSong2);
+
 }, 2800);
 
-// NO micro-dodge
+/* NO micro-dodge */
 document.addEventListener("mousemove", (e) => {
   const rect = noBtn.getBoundingClientRect();
   const dx = e.clientX - (rect.left + rect.width / 2);
@@ -303,13 +310,13 @@ document.addEventListener("mousemove", (e) => {
   }
 });
 
-// NO click
+/* NO click */
 noBtn.addEventListener("click", () => {
   toast.classList.add("show");
   setTimeout(() => toast.classList.remove("show"), 1600);
 });
 
-// YES click
+/* YES click */
 yesBtn.addEventListener("click", () => {
   songLoad.pause();
   songLoad.currentTime = 0;
@@ -322,7 +329,7 @@ yesBtn.addEventListener("click", () => {
   muteBtn.style.display = "block";
 });
 
-// Mute toggle
+/* Mute toggle */
 let muted = false;
 muteBtn.addEventListener("click", () => {
   muted = !muted;
