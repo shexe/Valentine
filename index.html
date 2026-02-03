@@ -37,7 +37,7 @@ video {
   z-index: -1;
 }
 
-/* Loading screen */
+/* Loader */
 .loader {
   position: fixed;
   inset: 0;
@@ -117,7 +117,7 @@ button {
   border: none;
   cursor: pointer;
   position: absolute;
-  transition: all 0.25s ease;
+  transition: all 0.35s ease;
 }
 
 #yes {
@@ -137,7 +137,7 @@ button {
   right: 0;
 }
 
-/* Success page */
+/* Success */
 .success {
   display: none;
 }
@@ -169,13 +169,13 @@ button {
   <div class="moon"></div>
 </div>
 
-<!-- Question page -->
+<!-- Question -->
 <div class="card" id="main" style="display:none;">
   <div class="card-inner">
     <h1>Hey Riddhi,<br>will you be my Valentine?</h1>
     <img src="question.png" alt="Memory">
 
-    <div class="buttons" id="buttonArea">
+    <div class="buttons">
       <button id="yes">Yes</button>
       <button id="no">No</button>
     </div>
@@ -196,51 +196,53 @@ const main = document.getElementById("main");
 const success = document.getElementById("success");
 const noBtn = document.getElementById("no");
 const yesBtn = document.getElementById("yes");
-const area = document.getElementById("buttonArea");
 
-/* Simulated loading */
+// Show page after loading
 setTimeout(() => {
   loader.style.display = "none";
   main.style.display = "flex";
 }, 2500);
 
-/* Save original NO position */
+// Save original NO position (relative to viewport)
 const original = {
-  left: noBtn.offsetLeft,
-  top: noBtn.offsetTop
+  x: noBtn.getBoundingClientRect().left,
+  y: noBtn.getBoundingClientRect().top
 };
 
-let moved = false;
+let escaped = false;
 
-/* Cursor proximity logic */
-area.addEventListener("mousemove", (e) => {
-  const btnRect = noBtn.getBoundingClientRect();
-  const areaRect = area.getBoundingClientRect();
-
-  const btnX = btnRect.left + btnRect.width / 2;
-  const btnY = btnRect.top + btnRect.height / 2;
+// Cursor proximity detection (FULL SCREEN)
+document.addEventListener("mousemove", (e) => {
+  const rect = noBtn.getBoundingClientRect();
+  const btnX = rect.left + rect.width / 2;
+  const btnY = rect.top + rect.height / 2;
 
   const distance = Math.hypot(e.clientX - btnX, e.clientY - btnY);
 
-  if (distance < 70 && !moved) {
-    moved = true;
+  if (distance < 90 && !escaped) {
+    escaped = true;
 
-    const maxX = areaRect.width - btnRect.width;
-    const maxY = areaRect.height - btnRect.height;
+    const maxX = window.innerWidth - rect.width - 20;
+    const maxY = window.innerHeight - rect.height - 20;
 
-    noBtn.style.left = Math.random() * maxX + "px";
-    noBtn.style.top = Math.random() * maxY + "px";
+    const randomX = Math.random() * maxX;
+    const randomY = Math.random() * maxY;
+
+    noBtn.style.position = "fixed";
+    noBtn.style.left = randomX + "px";
+    noBtn.style.top = randomY + "px";
   }
 });
 
-/* Return NO to original spot */
-area.addEventListener("mouseleave", () => {
-  moved = false;
-  noBtn.style.left = original.left + "px";
-  noBtn.style.top = original.top + "px";
+// Return to original position
+document.addEventListener("mouseleave", () => {
+  escaped = false;
+  noBtn.style.position = "absolute";
+  noBtn.style.left = "";
+  noBtn.style.top = "";
 });
 
-/* YES action */
+// YES click
 yesBtn.addEventListener("click", () => {
   main.style.display = "none";
   success.style.display = "flex";
@@ -249,4 +251,3 @@ yesBtn.addEventListener("click", () => {
 
 </body>
 </html>
-
