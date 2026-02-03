@@ -21,7 +21,7 @@ body {
   color: white;
 }
 
-/* Background */
+/* Background video */
 video {
   position: fixed;
   inset: 0;
@@ -31,6 +31,8 @@ video {
   filter: blur(20px) brightness(0.7);
   z-index: -2;
 }
+
+/* Overlay */
 .overlay {
   position: fixed;
   inset: 0;
@@ -38,8 +40,43 @@ video {
   z-index: -1;
 }
 
-/* LETTER SCENE */
-.letter-scene {
+/* ===== LOADER ===== */
+.loader {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.6);
+  z-index: 10;
+}
+
+.moon {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.moon::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #000;
+  border-radius: 50%;
+  animation: phase 2.8s ease-in-out infinite;
+}
+
+@keyframes phase {
+  0%   { transform: translateX(100%); }
+  50%  { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+/* ===== LAYOUT ===== */
+.card, .success {
   position: absolute;
   inset: 0;
   display: flex;
@@ -47,76 +84,41 @@ video {
   justify-content: center;
 }
 
-.envelope {
-  width: 320px;
-  height: 210px;
-  position: relative;
-  cursor: pointer;
-}
-
-.envelope-base {
-  position: absolute;
-  inset: 0;
-  background: #f2f2f2;
-  border-radius: 18px;
-}
-
-.envelope-flap {
-  position: absolute;
-  inset: 0;
-  background: #e0e0e0;
-  clip-path: polygon(0 0, 50% 55%, 100% 0);
-  transform-origin: top;
-  transition: transform 0.8s ease;
-}
-
-.letter {
-  position: absolute;
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 94%;
+/* Glass card */
+.card-inner, .success-inner {
   background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(22px);
-  border-radius: 18px;
-  padding: 26px;
-  opacity: 0;
-  transition: transform 1s ease, opacity 0.6s ease;
-}
-
-.envelope.open .envelope-flap {
-  transform: rotateX(180deg);
-}
-
-.envelope.open .letter {
-  transform: translate(-50%, -150px);
-  opacity: 1;
-}
-
-.tap-text {
-  margin-top: 22px;
-  font-size: 1rem;
-  opacity: 0.8;
+  backdrop-filter: blur(26px);
+  border-radius: 32px;
+  padding: 48px 42px;
+  width: min(92vw, 440px);
   text-align: center;
+  box-shadow: 0 35px 80px rgba(0,0,0,0.45);
 }
 
-/* Letter content */
-.letter h1 {
-  font-size: 1.7rem;
-  line-height: 1.3;
-  margin-bottom: 18px;
+/* Text */
+.card-inner h1 {
+  font-size: clamp(2rem, 5vw, 2.4rem);
+  line-height: 1.25;
+  margin-bottom: 28px;
 }
 
-.letter img {
+.success-inner h2 {
+  font-size: clamp(2.1rem, 5vw, 2.5rem);
+  margin-bottom: 26px;
+}
+
+/* Images */
+.card-inner img,
+.success-inner img {
   width: 100%;
-  border-radius: 16px;
-  margin-bottom: 20px;
+  border-radius: 22px;
+  margin-bottom: 30px;
 }
 
 /* Buttons */
 .buttons {
   position: relative;
-  height: 72px;
+  height: 80px;
 }
 
 button {
@@ -146,36 +148,12 @@ button {
   right: 0;
 }
 
-/* SUCCESS */
+/* ===== SUCCESS ===== */
 .success {
   display: none;
-  position: absolute;
-  inset: 0;
-  align-items: center;
-  justify-content: center;
 }
 
-.success-inner {
-  background: rgba(255,255,255,0.16);
-  backdrop-filter: blur(28px);
-  border-radius: 32px;
-  padding: 48px 42px;
-  width: min(92vw, 440px);
-  text-align: center;
-}
-
-.success-inner h2 {
-  font-size: 2.3rem;
-  margin-bottom: 26px;
-}
-
-.success-inner img {
-  width: 100%;
-  border-radius: 22px;
-  margin-bottom: 28px;
-}
-
-/* Download button */
+/* Download */
 .download-btn {
   display: inline-block;
   padding: 14px 32px;
@@ -188,6 +166,22 @@ button {
 }
 .download-btn:hover {
   transform: scale(1.06);
+}
+
+/* Mute button */
+.mute-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 12px 16px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: none;
+  z-index: 20;
 }
 
 /* Toast */
@@ -220,29 +214,25 @@ button {
   <source src="song.mp3" type="audio/mpeg">
 </audio>
 
-<audio id="songOpen">
+<audio id="songLoad" loop>
   <source src="song2.mp3" type="audio/mpeg">
 </audio>
 
-<!-- LETTER -->
-<div class="letter-scene" id="scene">
-  <div>
-    <div class="envelope" id="envelope">
-      <div class="envelope-base"></div>
-      <div class="envelope-flap"></div>
+<!-- LOADER -->
+<div class="loader" id="loader">
+  <div class="moon"></div>
+</div>
 
-      <div class="letter">
-        <h1>Hey Riddhi,<br>will you be my Valentine?</h1>
-        <img src="question.png" alt="Memory">
+<!-- QUESTION -->
+<div class="card" id="main" style="display:none;">
+  <div class="card-inner">
+    <h1>Hey Riddhi,<br>will you be my Valentine?</h1>
+    <img src="question.png" alt="Memory">
 
-        <div class="buttons">
-          <button id="yes">Yes</button>
-          <button id="no">No</button>
-        </div>
-      </div>
+    <div class="buttons">
+      <button id="yes">Yes</button>
+      <button id="no">No</button>
     </div>
-
-    <div class="tap-text" id="tapText">Tap to open</div>
   </div>
 </div>
 
@@ -259,35 +249,38 @@ button {
   </div>
 </div>
 
+<button class="mute-btn" id="muteBtn">🔊</button>
 <div class="toast" id="toast">Riddiculous. Think again.</div>
 
 <script>
-const envelope = document.getElementById("envelope");
-const tapText = document.getElementById("tapText");
-const scene = document.getElementById("scene");
+const loader = document.getElementById("loader");
+const main = document.getElementById("main");
 const success = document.getElementById("success");
 const noBtn = document.getElementById("no");
 const yesBtn = document.getElementById("yes");
 const toast = document.getElementById("toast");
+const muteBtn = document.getElementById("muteBtn");
 
 const songYes = document.getElementById("songYes");
-const songOpen = document.getElementById("songOpen");
+const songLoad = document.getElementById("songLoad");
 
-let opened = false;
+// Start loading music on first interaction
+let loadStarted = false;
+document.addEventListener("click", () => {
+  if (!loadStarted) {
+    songLoad.volume = 0.45;
+    songLoad.play().catch(()=>{});
+    loadStarted = true;
+  }
+}, { once: true });
 
-/* OPEN LETTER */
-envelope.addEventListener("click", () => {
-  if (opened) return;
-  opened = true;
+// Loader delay
+setTimeout(() => {
+  loader.style.display = "none";
+  main.style.display = "flex";
+}, 2800);
 
-  envelope.classList.add("open");
-  tapText.style.opacity = 0;
-
-  songOpen.volume = 0.5;
-  songOpen.play().catch(() => {});
-});
-
-/* NO subtle dodge */
+// NO micro-dodge
 document.addEventListener("mousemove", (e) => {
   const rect = noBtn.getBoundingClientRect();
   const dx = e.clientX - (rect.left + rect.width / 2);
@@ -310,22 +303,31 @@ document.addEventListener("mousemove", (e) => {
   }
 });
 
-/* NO click */
+// NO click
 noBtn.addEventListener("click", () => {
   toast.classList.add("show");
   setTimeout(() => toast.classList.remove("show"), 1600);
 });
 
-/* YES click */
+// YES click
 yesBtn.addEventListener("click", () => {
-  songOpen.pause();
-  songOpen.currentTime = 0;
+  songLoad.pause();
+  songLoad.currentTime = 0;
 
   songYes.volume = 0.55;
-  songYes.play().catch(() => {});
+  songYes.play().catch(()=>{});
 
-  scene.style.display = "none";
+  main.style.display = "none";
   success.style.display = "flex";
+  muteBtn.style.display = "block";
+});
+
+// Mute toggle
+let muted = false;
+muteBtn.addEventListener("click", () => {
+  muted = !muted;
+  songYes.muted = muted;
+  muteBtn.textContent = muted ? "🔇" : "🔊";
 });
 </script>
 
