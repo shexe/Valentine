@@ -12,7 +12,6 @@
   --accent2:#ff4f8b;
   --border:rgba(255,255,255,.25);
   --shadow-lg:0 40px 90px rgba(0,0,0,.45);
-  --shadow-sm:0 14px 35px rgba(0,0,0,.35);
 }
 
 *{
@@ -25,7 +24,7 @@
 body{
   min-height:100vh;
   color:#fff;
-  overflow-y:auto;   /* ✅ ENABLE SCROLL */
+  overflow-y:auto;
 }
 
 /* BACKGROUND */
@@ -79,12 +78,9 @@ video{
   overflow:hidden;
   animation:breath 7s ease-in-out infinite;
   background:
-    radial-gradient(circle at 30% 30%,#fff,#e6e6e6 40%,#b5b5b5 70%,#9a9a9a 100%),
-    radial-gradient(circle at 40% 65%,rgba(0,0,0,.18) 7%,transparent 8%),
-    radial-gradient(circle at 60% 40%,rgba(0,0,0,.15) 6%,transparent 7%);
+    radial-gradient(circle at 30% 30%,#fff,#e6e6e6 40%,#b5b5b5 70%,#9a9a9a 100%);
   box-shadow:
     inset -22px -22px 40px rgba(0,0,0,.45),
-    inset 10px 10px 28px rgba(255,255,255,.12),
     0 0 70px rgba(255,255,255,.25);
 }
 @keyframes breath{
@@ -106,25 +102,21 @@ video{
 }
 
 .loader-text{
-  font-size:1.15rem;
-  font-weight:500;
+  font-size:1.1rem;
   opacity:.85;
-  margin-bottom:20px;
+  margin-bottom:18px;
 }
 .hydrated-btn{
   padding:14px 48px;
   border-radius:999px;
   border:none;
   cursor:pointer;
-  font-size:1rem;
   color:#fff;
   background:linear-gradient(135deg,var(--accent1),var(--accent2));
-  box-shadow:0 14px 30px rgba(255,79,139,.45);
 }
 
 /* CARDS */
 .card,.success{
-  position:relative;
   min-height:100vh;
   display:flex;
   align-items:center;
@@ -146,14 +138,13 @@ h1,h2{
   font-weight:600;
   margin-bottom:28px;
 }
-h1{font-size:2.3rem}
-h2{font-size:2.5rem}
+h1{font-size:2.2rem}
+h2{font-size:2.4rem}
 
 /* HEARTBEAT */
 @keyframes heartbeat{
   0%,100%{transform:scale(1)}
   25%{transform:scale(1.04)}
-  45%{transform:scale(1)}
   60%{transform:scale(1.06)}
 }
 
@@ -163,13 +154,6 @@ h2{font-size:2.5rem}
   border-radius:24px;
   margin-bottom:34px;
   animation:heartbeat 2.8s infinite;
-}
-
-/* YES IMAGE */
-.success-inner img{
-  width:100%;
-  border-radius:20px;
-  margin-bottom:10px;
 }
 
 /* BUTTONS */
@@ -218,19 +202,27 @@ h2{font-size:2.5rem}
   transform:scale(1);
 }
 
-/* SUCCESS */
 .success{display:none}
 
-/* DOODLES – NO BOXES */
+/* SECTION HEADINGS */
+.section-title{
+  font-size:1.05rem;
+  font-weight:500;
+  margin:42px 0 22px;
+  opacity:.8;
+  text-align:left;
+}
+
+/* DOODLES */
 .doodle-list{
-  margin:36px 0 48px;
+  margin-bottom:48px;
 }
 .doodle-item{
   margin-bottom:32px;
 }
 .doodle-item img{
   width:100%;
-  border-radius:20px;
+  border-radius:18px;
 }
 .download-btn{
   display:inline-block;
@@ -247,23 +239,22 @@ h2{font-size:2.5rem}
 .final-message{
   opacity:0;
   transform:translateY(12px);
-  transition:opacity 1s ease,transform 1s ease;
+  transition:1s ease;
   font-size:.95rem;
   line-height:1.7;
+  text-align:left;
   color:rgba(255,255,255,.85);
-  text-align:left; /* ✅ LEFT ALIGNED */
 }
 .final-message.show{
   opacity:1;
-  transform:translateY(0);
+  transform:none;
 }
 .final-message p{
   margin-bottom:16px;
 }
 .signature{
   margin-top:24px;
-  font-weight:500;
-  opacity:.8;
+  opacity:.85;
 }
 
 /* MUTE */
@@ -278,31 +269,9 @@ h2{font-size:2.5rem}
   align-items:center;
   justify-content:center;
   background:rgba(0,0,0,.55);
-  backdrop-filter:blur(14px);
-  border:1px solid rgba(255,255,255,.25);
   color:#fff;
-  font-size:1.2rem;
   cursor:pointer;
-  box-shadow:0 10px 30px rgba(0,0,0,.45);
-  transition:.25s ease;
 }
-.mute-btn:hover{
-  transform:scale(1.1);
-}
-
-/* TOAST */
-.toast{
-  position:fixed;
-  bottom:28px;
-  left:50%;
-  transform:translateX(-50%);
-  background:rgba(0,0,0,.75);
-  padding:14px 26px;
-  border-radius:999px;
-  opacity:0;
-  transition:.3s;
-}
-.toast.show{opacity:1}
 </style>
 </head>
 
@@ -342,21 +311,23 @@ h2{font-size:2.5rem}
   <div class="success-inner">
     <h2>I knew you’d say yes, baby.</h2>
 
+    <h3 class="section-title">Little things I made for you</h3>
     <div class="doodle-list">
       <div class="doodle-item">
-        <img src="doodle1.png">
-        <a class="download-btn" href="doodle1.png" download>Download 💌</a>
+        <img src="doodle1-preview.jpg">
+        <a class="download-btn" href="doodle1.png" download>Download full quality 💌</a>
       </div>
       <div class="doodle-item">
-        <img src="doodle2.png">
-        <a class="download-btn" href="doodle2.png" download>Download 💌</a>
+        <img src="doodle2-preview.jpg">
+        <a class="download-btn" href="doodle2.png" download>Download full quality 💌</a>
       </div>
       <div class="doodle-item">
-        <img src="doodle3.png">
-        <a class="download-btn" href="doodle3.png" download>Download 💌</a>
+        <img src="doodle3-preview.jpg">
+        <a class="download-btn" href="doodle3.png" download>Download full quality 💌</a>
       </div>
     </div>
 
+    <h3 class="section-title">Something I wanted to say</h3>
     <div class="final-message" id="finalMessage">
       <p>I was thinking about our first date today and how light everything felt, how easy it was to just exist together. Sometimes I wish we could be like that again.</p>
       <p>You can call me a loser for trying too hard to fix things, but that’s honestly just how I love.</p>
@@ -369,7 +340,6 @@ h2{font-size:2.5rem}
 </div>
 
 <button class="mute-btn" id="muteBtn">🔊</button>
-<div class="toast" id="toast">Riddiculous! Don’t touch me.</div>
 
 <script>
 const hydrateBtn=document.getElementById("hydrateBtn");
@@ -379,26 +349,22 @@ const success=document.getElementById("success");
 const yesBtn=document.getElementById("yes");
 const noBtn=document.getElementById("no");
 const wrap=document.getElementById("btnWrap");
-const toast=document.getElementById("toast");
 const muteBtn=document.getElementById("muteBtn");
 const song2=document.getElementById("song2");
 const songYes=document.getElementById("songYes");
 const msg=document.getElementById("finalMessage");
 
-/* ENTER */
 hydrateBtn.onclick=()=>{
   song2.play();
   loader.style.display="none";
   main.style.display="flex";
 };
 
-/* NO BUTTON */
 wrap.addEventListener("mousemove",e=>{
   const r=noBtn.getBoundingClientRect();
   const dx=e.clientX-(r.left+r.width/2);
   const dy=e.clientY-(r.top+r.height/2);
   const dist=Math.hypot(dx,dy);
-
   if(dist<120){
     noBtn.classList.add("warn");
     const f=(120-dist)/120;
@@ -408,12 +374,7 @@ wrap.addEventListener("mousemove",e=>{
     noBtn.style.transform="translate(0,0)";
   }
 });
-noBtn.onclick=()=>{
-  toast.classList.add("show");
-  setTimeout(()=>toast.classList.remove("show"),1400);
-};
 
-/* YES */
 yesBtn.onclick=()=>{
   song2.pause();
   songYes.play();
@@ -422,17 +383,13 @@ yesBtn.onclick=()=>{
   muteBtn.style.display="flex";
 };
 
-/* MUTE */
 muteBtn.onclick=()=>{
   songYes.muted=!songYes.muted;
   muteBtn.textContent=songYes.muted?"🔇":"🔊";
 };
 
-/* MESSAGE REVEAL */
 new IntersectionObserver(e=>{
-  if(e[0].isIntersecting){
-    msg.classList.add("show");
-  }
+  if(e[0].isIntersecting) msg.classList.add("show");
 },{threshold:.2}).observe(msg);
 </script>
 
