@@ -23,9 +23,9 @@
 }
 
 body{
-  height:100vh;
-  overflow:hidden;
+  min-height:100vh;
   color:#fff;
+  overflow-y:auto;   /* ✅ ENABLE SCROLL */
 }
 
 /* BACKGROUND */
@@ -124,11 +124,12 @@ video{
 
 /* CARDS */
 .card,.success{
-  position:absolute;
-  inset:0;
+  position:relative;
+  min-height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
+  padding:60px 0;
 }
 .card-inner,.success-inner{
   width:min(92vw,460px);
@@ -168,8 +169,7 @@ h2{font-size:2.5rem}
 .success-inner img{
   width:100%;
   border-radius:20px;
-  margin-bottom:16px;
-  box-shadow:var(--shadow-sm);
+  margin-bottom:10px;
 }
 
 /* BUTTONS */
@@ -221,22 +221,16 @@ h2{font-size:2.5rem}
 /* SUCCESS */
 .success{display:none}
 
-/* DOODLE GRID */
-.doodle-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:22px;
-  margin:34px 0 46px;
+/* DOODLES – NO BOXES */
+.doodle-list{
+  margin:36px 0 48px;
 }
-.doodle-card:nth-child(3){
-  grid-column:span 2;
+.doodle-item{
+  margin-bottom:32px;
 }
-.doodle-card{
-  background:rgba(255,255,255,.08);
-  border-radius:22px;
-  padding:16px;
-  border:1px solid rgba(255,255,255,.18);
-  box-shadow:0 12px 30px rgba(0,0,0,.25);
+.doodle-item img{
+  width:100%;
+  border-radius:20px;
 }
 .download-btn{
   display:inline-block;
@@ -257,6 +251,7 @@ h2{font-size:2.5rem}
   font-size:.95rem;
   line-height:1.7;
   color:rgba(255,255,255,.85);
+  text-align:left; /* ✅ LEFT ALIGNED */
 }
 .final-message.show{
   opacity:1;
@@ -264,6 +259,11 @@ h2{font-size:2.5rem}
 }
 .final-message p{
   margin-bottom:16px;
+}
+.signature{
+  margin-top:24px;
+  font-weight:500;
+  opacity:.8;
 }
 
 /* MUTE */
@@ -303,12 +303,6 @@ h2{font-size:2.5rem}
   transition:.3s;
 }
 .toast.show{opacity:1}
-
-/* MOBILE */
-@media(max-width:600px){
-  .doodle-grid{grid-template-columns:1fr}
-  .doodle-card:nth-child(3){grid-column:auto}
-}
 </style>
 </head>
 
@@ -335,7 +329,7 @@ h2{font-size:2.5rem}
 <div class="card fade" id="main" style="display:none;">
   <div class="card-inner">
     <h1>Hey Riddhi,<br>will you be my Valentine?</h1>
-    <img src="question.png">
+    <img src="heart.png">
     <div class="buttons" id="btnWrap">
       <button id="yes">Yes</button>
       <button id="no">No</button>
@@ -348,16 +342,16 @@ h2{font-size:2.5rem}
   <div class="success-inner">
     <h2>I knew you’d say yes, baby.</h2>
 
-    <div class="doodle-grid">
-      <div class="doodle-card">
-        <img src="yes.png">
-        <a class="download-btn" href="yes.png" download>Download 💌</a>
+    <div class="doodle-list">
+      <div class="doodle-item">
+        <img src="doodle1.png">
+        <a class="download-btn" href="doodle1.png" download>Download 💌</a>
       </div>
-      <div class="doodle-card">
+      <div class="doodle-item">
         <img src="doodle2.png">
         <a class="download-btn" href="doodle2.png" download>Download 💌</a>
       </div>
-      <div class="doodle-card">
+      <div class="doodle-item">
         <img src="doodle3.png">
         <a class="download-btn" href="doodle3.png" download>Download 💌</a>
       </div>
@@ -369,6 +363,7 @@ h2{font-size:2.5rem}
       <p>Maybe time hasn’t been very kind to us, or maybe we weren’t always kind to each other when it mattered.</p>
       <p>But whatever it is, I’ll hold your hand for as long as you’re willing to walk with me.</p>
       <p>And if nothing else, I hope this reminds you that what we had and still have, was real and beautiful in its own way.</p>
+      <div class="signature">– Shivam</div>
     </div>
   </div>
 </div>
