@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
@@ -61,8 +61,9 @@ video {
 .loader-inner {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 22px;
+  align-items: center;     /* horizontal center */
+  text-align: center;      /* text + button center */
+  gap: 18px;
 }
 
 /* REALISTIC MOON */
@@ -107,148 +108,30 @@ video {
   opacity: 0.85;
 }
 
-/* HYDRATED BUTTON */
+/* HYDRATED BUTTON — FIXED */
 .hydrated-btn {
-  align-self: center;
+  display: inline-flex;        /* critical */
+  align-items: center;
+  justify-content: center;
+
   padding: 14px 44px;
   border-radius: 999px;
   border: none;
   cursor: pointer;
   font-size: 1rem;
   color: white;
+
   background: linear-gradient(135deg, var(--accent1), var(--accent2));
   box-shadow:
     0 14px 30px rgba(255,79,139,0.45),
     inset 0 1px 0 rgba(255,255,255,0.4);
+
   transition: transform 0.25s ease;
 }
 
 .hydrated-btn:hover {
   transform: translateY(-2px) scale(1.05);
 }
-
-/* ===== MAIN CARD ===== */
-.card, .success {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.card-inner, .success-inner {
-  width: min(92vw, 460px);
-  padding: 56px 46px;
-  border-radius: 32px;
-  background: linear-gradient(
-    180deg,
-    rgba(255,255,255,0.25),
-    rgba(255,255,255,0.1)
-  );
-  backdrop-filter: blur(30px);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-lg);
-  text-align: center;
-}
-
-h1, h2 {
-  font-weight: 600;
-  line-height: 1.25;
-  margin-bottom: 28px;
-}
-
-h1 { font-size: 2.4rem; }
-h2 { font-size: 2.6rem; }
-
-.card-inner img {
-  width: 100%;
-  border-radius: 24px;
-  margin-bottom: 34px;
-  box-shadow: none;
-}
-
-.success-inner img {
-  width: 100%;
-  border-radius: 24px;
-  margin-bottom: 34px;
-  box-shadow: var(--shadow-sm);
-}
-
-/* BUTTONS */
-.buttons {
-  position: relative;
-  height: 90px;
-}
-
-button {
-  position: absolute;
-  padding: 16px 44px;
-  font-size: 1.05rem;
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-  transition: transform 0.25s ease;
-}
-
-#yes {
-  left: 0;
-  background: linear-gradient(135deg, var(--accent1), var(--accent2));
-  color: white;
-}
-
-#no {
-  right: 0;
-  background: rgba(255,255,255,0.2);
-  color: white;
-  border: 1px solid rgba(255,255,255,0.35);
-}
-
-/* DOWNLOAD – MATCHES YES */
-.download-btn {
-  display: inline-block;
-  padding: 16px 44px;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--accent1), var(--accent2));
-  color: white;
-  text-decoration: none;
-  font-weight: 500;
-  box-shadow:
-    0 14px 30px rgba(255,79,139,0.45),
-    inset 0 1px 0 rgba(255,255,255,0.4);
-}
-
-/* MUTE – TRUE CIRCLE */
-.mute-btn {
-  position: fixed;
-  bottom: 22px;
-  right: 22px;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0,0,0,0.55);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(255,255,255,0.25);
-  color: white;
-  font-size: 1.2rem;
-  cursor: pointer;
-}
-
-/* TOAST */
-.toast {
-  position: fixed;
-  bottom: 28px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0,0,0,0.75);
-  padding: 14px 26px;
-  border-radius: 999px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-.toast.show { opacity: 1; }
 </style>
 </head>
 
@@ -260,101 +143,25 @@ button {
 <div class="overlay"></div>
 
 <audio id="song2" loop src="song2.mp3"></audio>
-<audio id="songYes" loop src="song.mp3"></audio>
 
 <!-- LOADER -->
 <div class="loader" id="loader">
   <div class="loader-inner">
     <div class="moon"></div>
-    <div class="loader-text">Hydrate yourself to enter</div>
+    <div class="loader-text">Hydrate yourself to enter!</div>
     <button class="hydrated-btn" id="hydrateBtn">Hydrated</button>
   </div>
 </div>
 
-<!-- MAIN -->
-<div class="card" id="main" style="display:none;">
-  <div class="card-inner">
-    <h1>Hey Riddhi,<br>will you be my Valentine?</h1>
-    <img src="question.png" />
-    <div class="buttons" id="btnWrap">
-      <button id="yes">Yes</button>
-      <button id="no">No</button>
-    </div>
-  </div>
-</div>
-
-<!-- SUCCESS -->
-<div class="success" id="success" style="display:none;">
-  <div class="success-inner">
-    <h2>I knew you’d say yes, baby.</h2>
-    <img src="yes.png" />
-    <a class="download-btn" href="yes.png" download>Download doodle 💌</a>
-  </div>
-</div>
-
-<button class="mute-btn" id="muteBtn">🔊</button>
-<div class="toast" id="toast">Riddiculous. Think again.</div>
-
 <script>
 const hydrateBtn = document.getElementById("hydrateBtn");
 const loader = document.getElementById("loader");
-const main = document.getElementById("main");
-const success = document.getElementById("success");
-
-const yesBtn = document.getElementById("yes");
-const noBtn = document.getElementById("no");
-const wrap = document.getElementById("btnWrap");
-const toast = document.getElementById("toast");
-const muteBtn = document.getElementById("muteBtn");
-
 const song2 = document.getElementById("song2");
-const songYes = document.getElementById("songYes");
 
-/* ENTER */
 hydrateBtn.onclick = () => {
   song2.volume = 0.45;
   song2.play().catch(()=>{});
   loader.style.display = "none";
-  main.style.display = "flex";
-};
-
-/* SHY NO BUTTON */
-wrap.addEventListener("mousemove", e => {
-  const r = noBtn.getBoundingClientRect();
-  const cx = r.left + r.width / 2;
-  const cy = r.top + r.height / 2;
-  const dx = e.clientX - cx;
-  const dy = e.clientY - cy;
-  const dist = Math.hypot(dx, dy);
-
-  if (dist < 80) {
-    const strength = (80 - dist) / 80;
-    noBtn.style.transform = `translate(${-dx * strength * 0.18}px, ${-dy * strength * 0.18}px)`;
-  }
-});
-
-wrap.addEventListener("mouseleave", () => {
-  noBtn.style.transform = "translate(0,0)";
-});
-
-noBtn.onclick = () => {
-  toast.classList.add("show");
-  setTimeout(()=>toast.classList.remove("show"),1400);
-};
-
-/* YES */
-yesBtn.onclick = () => {
-  song2.pause();
-  songYes.volume = 0.55;
-  songYes.play().catch(()=>{});
-  main.style.display = "none";
-  success.style.display = "flex";
-  muteBtn.style.display = "flex";
-};
-
-muteBtn.onclick = () => {
-  songYes.muted = !songYes.muted;
-  muteBtn.textContent = songYes.muted ? "🔇" : "🔊";
 };
 </script>
 
