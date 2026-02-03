@@ -10,7 +10,7 @@
 :root{
   --accent1:#ff7eb3;
   --accent2:#ff4f8b;
-  --border:rgba(255,255,255,.3);
+  --border:rgba(255,255,255,.25);
   --shadow-lg:0 40px 90px rgba(0,0,0,.45);
   --shadow-sm:0 14px 35px rgba(0,0,0,.35);
 }
@@ -45,7 +45,7 @@ video{
   z-index:-1;
 }
 
-/* TRANSITION */
+/* FADE */
 .fade{animation:fadeIn .6s ease forwards}
 @keyframes fadeIn{
   from{opacity:0;transform:scale(.97)}
@@ -145,19 +145,30 @@ h1,h2{
   font-weight:600;
   margin-bottom:28px;
 }
-h1{font-size:2.4rem}
-h2{font-size:2.6rem}
+h1{font-size:2.3rem}
+h2{font-size:2.5rem}
 
-/* IMAGES */
+/* HEARTBEAT */
+@keyframes heartbeat{
+  0%,100%{transform:scale(1)}
+  25%{transform:scale(1.04)}
+  45%{transform:scale(1)}
+  60%{transform:scale(1.06)}
+}
+
+/* QUESTION IMAGE */
 .card-inner img{
   width:100%;
   border-radius:24px;
   margin-bottom:34px;
+  animation:heartbeat 2.8s infinite;
 }
+
+/* YES IMAGE */
 .success-inner img{
   width:100%;
-  border-radius:24px;
-  margin-bottom:40px;
+  border-radius:20px;
+  margin-bottom:16px;
   box-shadow:var(--shadow-sm);
 }
 
@@ -174,21 +185,17 @@ h2{font-size:2.6rem}
   cursor:pointer;
 }
 
-/* YES – HEARTBEAT */
+/* YES */
 #yes{
   left:0;
   background:linear-gradient(135deg,var(--accent1),var(--accent2));
   color:#fff;
-  animation:heartbeat 1.8s infinite;
 }
-@keyframes heartbeat{
-  0%,100%{transform:scale(1)}
-  25%{transform:scale(1.05)}
-  45%{transform:scale(1)}
-  60%{transform:scale(1.08)}
+#yes:hover{
+  animation:heartbeat 1.2s infinite;
 }
 
-/* NO + HAND ONLY */
+/* NO */
 #no{
   right:0;
   background:rgba(255,255,255,.2);
@@ -213,15 +220,53 @@ h2{font-size:2.6rem}
 
 /* SUCCESS */
 .success{display:none}
+
+/* DOODLE GRID */
+.doodle-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:22px;
+  margin:34px 0 46px;
+}
+.doodle-card:nth-child(3){
+  grid-column:span 2;
+}
+.doodle-card{
+  background:rgba(255,255,255,.08);
+  border-radius:22px;
+  padding:16px;
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 12px 30px rgba(0,0,0,.25);
+}
 .download-btn{
-  padding:16px 44px;
+  display:inline-block;
+  margin-top:10px;
+  padding:12px 32px;
   border-radius:999px;
   background:linear-gradient(135deg,var(--accent1),var(--accent2));
   color:#fff;
   text-decoration:none;
+  font-size:.9rem;
 }
 
-/* MUTE – ORIGINAL SIMPLE CIRCLE */
+/* MESSAGE */
+.final-message{
+  opacity:0;
+  transform:translateY(12px);
+  transition:opacity 1s ease,transform 1s ease;
+  font-size:.95rem;
+  line-height:1.7;
+  color:rgba(255,255,255,.85);
+}
+.final-message.show{
+  opacity:1;
+  transform:translateY(0);
+}
+.final-message p{
+  margin-bottom:16px;
+}
+
+/* MUTE */
 .mute-btn{
   position:fixed;
   bottom:22px;
@@ -233,8 +278,16 @@ h2{font-size:2.6rem}
   align-items:center;
   justify-content:center;
   background:rgba(0,0,0,.55);
+  backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.25);
   color:#fff;
+  font-size:1.2rem;
   cursor:pointer;
+  box-shadow:0 10px 30px rgba(0,0,0,.45);
+  transition:.25s ease;
+}
+.mute-btn:hover{
+  transform:scale(1.1);
 }
 
 /* TOAST */
@@ -250,6 +303,12 @@ h2{font-size:2.6rem}
   transition:.3s;
 }
 .toast.show{opacity:1}
+
+/* MOBILE */
+@media(max-width:600px){
+  .doodle-grid{grid-template-columns:1fr}
+  .doodle-card:nth-child(3){grid-column:auto}
+}
 </style>
 </head>
 
@@ -263,6 +322,7 @@ h2{font-size:2.6rem}
 <audio id="song2" loop src="song2.mp3"></audio>
 <audio id="songYes" loop src="song.mp3"></audio>
 
+<!-- LOADER -->
 <div class="loader" id="loader">
   <div class="loader-inner">
     <div class="moon"></div>
@@ -271,6 +331,7 @@ h2{font-size:2.6rem}
   </div>
 </div>
 
+<!-- QUESTION -->
 <div class="card fade" id="main" style="display:none;">
   <div class="card-inner">
     <h1>Hey Riddhi,<br>will you be my Valentine?</h1>
@@ -282,16 +343,38 @@ h2{font-size:2.6rem}
   </div>
 </div>
 
+<!-- YES PAGE -->
 <div class="success fade" id="success">
   <div class="success-inner">
     <h2>I knew you’d say yes, baby.</h2>
-    <img src="yes.png">
-    <a class="download-btn" href="yes.png" download>Download doodle 💌</a>
+
+    <div class="doodle-grid">
+      <div class="doodle-card">
+        <img src="yes.png">
+        <a class="download-btn" href="yes.png" download>Download 💌</a>
+      </div>
+      <div class="doodle-card">
+        <img src="doodle2.png">
+        <a class="download-btn" href="doodle2.png" download>Download 💌</a>
+      </div>
+      <div class="doodle-card">
+        <img src="doodle3.png">
+        <a class="download-btn" href="doodle3.png" download>Download 💌</a>
+      </div>
+    </div>
+
+    <div class="final-message" id="finalMessage">
+      <p>I was thinking about our first date today and how light everything felt, how easy it was to just exist together. Sometimes I wish we could be like that again.</p>
+      <p>You can call me a loser for trying too hard to fix things, but that’s honestly just how I love.</p>
+      <p>Maybe time hasn’t been very kind to us, or maybe we weren’t always kind to each other when it mattered.</p>
+      <p>But whatever it is, I’ll hold your hand for as long as you’re willing to walk with me.</p>
+      <p>And if nothing else, I hope this reminds you that what we had and still have, was real and beautiful in its own way.</p>
+    </div>
   </div>
 </div>
 
 <button class="mute-btn" id="muteBtn">🔊</button>
-<div class="toast" id="toast">Riddiculous! Don't touch me.</div>
+<div class="toast" id="toast">Riddiculous! Don’t touch me.</div>
 
 <script>
 const hydrateBtn=document.getElementById("hydrateBtn");
@@ -305,6 +388,7 @@ const toast=document.getElementById("toast");
 const muteBtn=document.getElementById("muteBtn");
 const song2=document.getElementById("song2");
 const songYes=document.getElementById("songYes");
+const msg=document.getElementById("finalMessage");
 
 /* ENTER */
 hydrateBtn.onclick=()=>{
@@ -329,7 +413,6 @@ wrap.addEventListener("mousemove",e=>{
     noBtn.style.transform="translate(0,0)";
   }
 });
-
 noBtn.onclick=()=>{
   toast.classList.add("show");
   setTimeout(()=>toast.classList.remove("show"),1400);
@@ -349,6 +432,13 @@ muteBtn.onclick=()=>{
   songYes.muted=!songYes.muted;
   muteBtn.textContent=songYes.muted?"🔇":"🔊";
 };
+
+/* MESSAGE REVEAL */
+new IntersectionObserver(e=>{
+  if(e[0].isIntersecting){
+    msg.classList.add("show");
+  }
+},{threshold:.2}).observe(msg);
 </script>
 
 </body>
