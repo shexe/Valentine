@@ -68,20 +68,25 @@ video{
   text-align:center;
 }
 
-/* MOON */
+/* PINK MOON */
 .moon{
   width:140px;
   height:140px;
   border-radius:50%;
-  margin-bottom:24px;
+  margin-bottom:18px;
   position:relative;
   overflow:hidden;
   animation:breath 7s ease-in-out infinite;
   background:
-    radial-gradient(circle at 30% 30%,#fff,#e6e6e6 40%,#b5b5b5 70%,#9a9a9a 100%);
+    radial-gradient(circle at 30% 30%,
+      #ffe6ee,
+      #f6b7c9 45%,
+      #d98aa3 70%,
+      #b36a82 100%);
   box-shadow:
-    inset -22px -22px 40px rgba(0,0,0,.45),
-    0 0 70px rgba(255,255,255,.25);
+    inset -22px -22px 40px rgba(120,40,70,.35),
+    inset 10px 10px 28px rgba(255,220,230,.25),
+    0 0 80px rgba(255,150,180,.35);
 }
 @keyframes breath{
   0%,100%{transform:scale(1)}
@@ -101,6 +106,14 @@ video{
   100%{transform:translateX(-100%)}
 }
 
+/* MOON TEXT */
+.moon-text{
+  font-size:.95rem;
+  opacity:.85;
+  margin-bottom:14px;
+}
+
+/* LOADER TEXT */
 .loader-text{
   font-size:1.1rem;
   opacity:.85;
@@ -289,6 +302,7 @@ h2{font-size:2.4rem}
 <div class="loader" id="loader">
   <div class="loader-inner">
     <div class="moon"></div>
+    <div class="moon-text">The moon is blushing after seeing you</div>
     <div class="loader-text">Hydrate yourself to enter!</div>
     <button class="hydrated-btn" id="hydrateBtn">Hydrated</button>
   </div>
@@ -315,15 +329,15 @@ h2{font-size:2.4rem}
     <div class="doodle-list">
       <div class="doodle-item">
         <img src="doodle1-preview.jpg">
-        <a class="download-btn" href="doodle1.png" download>Download full quality 💌</a>
+        <a class="download-btn" href="doodle1.png" download>Download 💌</a>
       </div>
       <div class="doodle-item">
         <img src="doodle2-preview.jpg">
-        <a class="download-btn" href="doodle2.png" download>Download full quality 💌</a>
+        <a class="download-btn" href="doodle2.png" download>Download 💌</a>
       </div>
       <div class="doodle-item">
         <img src="doodle3-preview.jpg">
-        <a class="download-btn" href="doodle3.png" download>Download full quality 💌</a>
+        <a class="download-btn" href="doodle3.png" download>Download 💌</a>
       </div>
     </div>
 
