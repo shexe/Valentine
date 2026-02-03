@@ -7,7 +7,7 @@
 <link rel="icon" href="favicon.png">
 
 <style>
-:root {
+:root{
   --accent1:#ff7eb3;
   --accent2:#ff4f8b;
   --border:rgba(255,255,255,.3);
@@ -15,6 +15,7 @@
   --shadow-sm:0 14px 35px rgba(0,0,0,.35);
 }
 
+/* RESET */
 *{
   margin:0;
   padding:0;
@@ -45,7 +46,7 @@ video{
   z-index:-1;
 }
 
-/* LOADER */
+/* ================= LOADER ================= */
 .loader{
   position:fixed;
   inset:0;
@@ -94,14 +95,14 @@ video{
   100%{transform:translateX(-100%)}
 }
 
-/* LOADER TEXT + BUTTON */
 .loader-text{
   font-size:1.15rem;
   font-weight:500;
   letter-spacing:.02em;
   opacity:.85;
-  margin-bottom:20px; /* THIS ENSURES BUTTON IS BELOW TEXT */
+  margin-bottom:20px;
 }
+
 .hydrated-btn{
   display:block;
   margin:0 auto;
@@ -121,7 +122,7 @@ video{
   transform:translateY(-2px) scale(1.05);
 }
 
-/* MAIN CARD */
+/* ================= CARDS ================= */
 .card,.success{
   position:absolute;
   inset:0;
@@ -129,16 +130,24 @@ video{
   align-items:center;
   justify-content:center;
 }
-.card-inner,.success-inner{
+
+.card-inner,
+.success-inner{
   width:min(92vw,460px);
-  padding:56px 46px;
+  padding:60px 48px; /* RESTORED SIZE */
   border-radius:32px;
-  background:linear-gradient(180deg,rgba(255,255,255,.25),rgba(255,255,255,.1));
+  background:linear-gradient(
+    180deg,
+    rgba(255,255,255,.25),
+    rgba(255,255,255,.1)
+  );
   backdrop-filter:blur(30px);
   border:1px solid var(--border);
   box-shadow:var(--shadow-lg);
   text-align:center;
 }
+
+/* TEXT */
 h1,h2{
   font-weight:600;
   line-height:1.25;
@@ -157,11 +166,11 @@ h2{font-size:2.6rem}
 .success-inner img{
   width:100%;
   border-radius:24px;
-  margin-bottom:34px;
+  margin-bottom:40px;
   box-shadow:var(--shadow-sm);
 }
 
-/* BUTTONS */
+/* BUTTON ROW */
 .buttons{
   position:relative;
   height:90px;
@@ -175,11 +184,15 @@ h2{font-size:2.6rem}
   cursor:pointer;
   transition:transform .25s ease;
 }
+
+/* YES */
 #yes{
   left:0;
   background:linear-gradient(135deg,var(--accent1),var(--accent2));
   color:#fff;
 }
+
+/* NO + HAND */
 #no{
   right:0;
   background:rgba(255,255,255,.2);
@@ -187,8 +200,44 @@ h2{font-size:2.6rem}
   border:1px solid rgba(255,255,255,.35);
 }
 
+/* HAND */
+#no::before{
+  content:"✋";
+  position:absolute;
+  left:-28px;
+  bottom:-10px;
+  font-size:1.6rem;
+  opacity:0;
+  transform:scale(.6);
+  transition:.25s ease;
+}
+
+/* SIGN */
+#no::after{
+  content:"don’t touch me";
+  position:absolute;
+  left:-140px;
+  bottom:18px;
+  background:rgba(0,0,0,.7);
+  padding:6px 10px;
+  font-size:.75rem;
+  border-radius:8px;
+  white-space:nowrap;
+  opacity:0;
+  transform:scale(.7);
+  transition:.25s ease;
+}
+
+#no.warn::before,
+#no.warn::after{
+  opacity:1;
+  transform:scale(1);
+}
+
 /* SUCCESS */
 .success{display:none}
+
+/* DOWNLOAD BUTTON */
 .download-btn{
   display:inline-block;
   padding:16px 44px;
@@ -300,7 +349,7 @@ hydrateBtn.onclick=()=>{
   main.style.display="flex";
 };
 
-/* SHY NO BUTTON – STRONG */
+/* SHY NO BUTTON */
 wrap.addEventListener("mousemove",e=>{
   const r=noBtn.getBoundingClientRect();
   const cx=r.left+r.width/2;
@@ -309,14 +358,19 @@ wrap.addEventListener("mousemove",e=>{
   const dy=e.clientY-cy;
   const dist=Math.hypot(dx,dy);
 
-  if(dist<110){
-    const force=(110-dist)/110;
-    noBtn.style.transform=`translate(${-dx*force*.35}px,${-dy*force*.35}px)`;
+  if(dist<120){
+    noBtn.classList.add("warn");
+    const force=(120-dist)/120;
+    noBtn.style.transform=`translate(${-dx*force*.4}px,${-dy*force*.4}px)`;
+  }else{
+    noBtn.classList.remove("warn");
   }
 });
 wrap.addEventListener("mouseleave",()=>{
+  noBtn.classList.remove("warn");
   noBtn.style.transform="translate(0,0)";
 });
+
 noBtn.onclick=()=>{
   toast.classList.add("show");
   setTimeout(()=>toast.classList.remove("show"),1400);
