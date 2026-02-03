@@ -1,18 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>Valentine</title>
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" type="image/png" href="favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="icon" href="favicon.png" />
 
 <style>
+:root {
+  --glass: rgba(255,255,255,0.18);
+  --border: rgba(255,255,255,0.28);
+  --shadow-lg: 0 40px 90px rgba(0,0,0,0.45);
+  --shadow-sm: 0 14px 35px rgba(0,0,0,0.35);
+  --accent: #ff5fa2;
+}
+
+/* RESET */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 body {
@@ -21,65 +29,94 @@ body {
   color: white;
 }
 
-/* ===== BACKGROUND VIDEO ===== */
+/* BACKGROUND VIDEO */
 video {
   position: fixed;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: blur(20px) brightness(0.7);
+  filter: blur(22px) brightness(0.7);
   z-index: -2;
 }
 
-/* Dark overlay */
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.45);
+  background: radial-gradient(circle at top, rgba(255,255,255,0.08), rgba(0,0,0,0.55));
   z-index: -1;
 }
 
-/* ===== MOON LOADER (OVER VIDEO) ===== */
+/* MOON LOADER */
 .loader {
   position: fixed;
   inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.35); /* NOT black */
+  background: rgba(0,0,0,0.35);
   z-index: 10;
+}
+
+.loader-inner {
+  text-align: center;
 }
 
 .moon {
   width: 120px;
   height: 120px;
+  margin: 0 auto 26px;
   border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #fff, #ddd 45%, #aaa 75%);
-  position: relative;
-  overflow: hidden;
+  background: radial-gradient(circle at 30% 30%, #fff, #ddd 50%, #aaa 75%);
   box-shadow:
     inset -18px -18px 35px rgba(0,0,0,0.45),
     inset 12px 12px 25px rgba(255,255,255,0.15),
-    0 0 45px rgba(255,255,255,0.15);
+    0 0 60px rgba(255,255,255,0.18);
+  position: relative;
+  overflow: hidden;
 }
 
 .moon::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: black;
+  background: #000;
   border-radius: 50%;
-  animation: lunar 3s ease-in-out infinite;
+  animation: phase 3s ease-in-out infinite;
 }
 
-@keyframes lunar {
-  0%   { transform: translateX(100%); }
-  50%  { transform: translateX(0); }
+@keyframes phase {
+  0% { transform: translateX(100%); }
+  50% { transform: translateX(0); }
   100% { transform: translateX(-100%); }
 }
 
-/* ===== LAYOUT ===== */
+.loader-text {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin-bottom: 18px;
+}
+
+/* HYDRATED BUTTON */
+.hydrated-btn {
+  padding: 14px 40px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: white;
+  background: linear-gradient(135deg, #ff7eb3, #ff4f8b);
+  box-shadow:
+    0 14px 30px rgba(255,79,139,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hydrated-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+
+/* LAYOUT */
 .card, .success {
   position: absolute;
   inset: 0;
@@ -89,95 +126,119 @@ video {
 }
 
 .card-inner, .success-inner {
-  background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(26px);
+  width: min(92vw, 460px);
+  padding: 56px 46px;
   border-radius: 32px;
-  padding: 48px 42px;
-  width: min(92vw, 440px);
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.24),
+    rgba(255,255,255,0.1)
+  );
+  backdrop-filter: blur(30px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
   text-align: center;
-  box-shadow: 0 35px 80px rgba(0,0,0,0.45);
 }
 
-/* Text */
-.card-inner h1 {
-  font-size: clamp(2rem, 5vw, 2.4rem);
+/* TEXT */
+h1 {
+  font-size: clamp(2.2rem, 5vw, 2.6rem);
+  font-weight: 600;
   line-height: 1.25;
   margin-bottom: 28px;
 }
 
-.success-inner h2 {
-  font-size: clamp(2.1rem, 5vw, 2.5rem);
+h2 {
+  font-size: clamp(2.3rem, 5vw, 2.7rem);
   margin-bottom: 26px;
 }
 
-/* Images */
-.card-inner img,
-.success-inner img {
+/* IMAGES */
+.card-inner img {
   width: 100%;
-  border-radius: 22px;
-  margin-bottom: 30px;
+  border-radius: 24px;
+  margin-bottom: 34px;
+  box-shadow: none;
 }
 
-/* Buttons */
+.success-inner img {
+  width: 100%;
+  border-radius: 24px;
+  margin-bottom: 34px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* BUTTONS */
 .buttons {
   position: relative;
-  height: 80px;
+  height: 90px;
 }
 
 button {
+  position: absolute;
   padding: 16px 44px;
   font-size: 1.05rem;
-  border-radius: 44px;
-  border: none;
+  border-radius: 999px;
   cursor: pointer;
-  position: absolute;
+  border: none;
 }
 
+/* YES */
 #yes {
-  background: white;
-  color: black;
   left: 0;
-}
-
-#no {
-  background: transparent;
+  background: linear-gradient(135deg, #ff7eb3, #ff4f8b);
   color: white;
-  border: 1px solid rgba(255,255,255,0.45);
-  right: 0;
+  box-shadow:
+    0 12px 28px rgba(255,79,139,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.45);
 }
 
-/* Success */
+/* NO */
+#no {
+  right: 0;
+  background: rgba(255,255,255,0.18);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.35);
+  backdrop-filter: blur(10px);
+}
+
+/* SUCCESS */
 .success {
   display: none;
 }
 
-/* Download */
 .download-btn {
   display: inline-block;
-  padding: 14px 32px;
-  border-radius: 32px;
-  background: white;
-  color: black;
+  padding: 14px 36px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ffffff, #eaeaea);
+  color: #111;
   text-decoration: none;
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
 }
 
-/* Mute */
+/* MUTE BUTTON */
 .mute-btn {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
-  padding: 12px 16px;
+  bottom: 22px;
+  right: 22px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  background: rgba(0,0,0,0.6);
-  color: white;
-  border: none;
-  font-size: 1.1rem;
-  cursor: pointer;
   display: none;
-  z-index: 20;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
 }
 
-/* Toast */
+/* TOAST */
 .toast {
   position: fixed;
   bottom: 28px;
@@ -185,7 +246,7 @@ button {
   transform: translateX(-50%);
   background: rgba(0,0,0,0.75);
   padding: 14px 26px;
-  border-radius: 32px;
+  border-radius: 999px;
   opacity: 0;
   transition: opacity 0.3s ease;
 }
@@ -195,28 +256,30 @@ button {
 
 <body>
 
-<!-- BACKGROUND -->
 <video autoplay muted loop playsinline>
-  <source src="bg.mp4" type="video/mp4">
+  <source src="bg.mp4" type="video/mp4" />
 </video>
 <div class="overlay"></div>
 
-<!-- AUDIO -->
-<audio id="song2" autoplay loop muted src="song2.mp3"></audio>
+<audio id="song2" loop src="song2.mp3"></audio>
 <audio id="songYes" loop src="song.mp3"></audio>
 
 <!-- LOADER -->
 <div class="loader" id="loader">
-  <div class="moon"></div>
+  <div class="loader-inner">
+    <div class="moon"></div>
+    <div class="loader-text">Hydrate yourself to enter</div>
+    <button class="hydrated-btn" id="hydrateBtn">Hydrated</button>
+  </div>
 </div>
 
 <!-- QUESTION -->
 <div class="card" id="main" style="display:none;">
   <div class="card-inner">
     <h1>Hey Riddhi,<br>will you be my Valentine?</h1>
-    <img src="question.png">
+    <img src="question.png" />
 
-    <div class="buttons">
+    <div class="buttons" id="btnWrap">
       <button id="yes">Yes</button>
       <button id="no">No</button>
     </div>
@@ -227,8 +290,8 @@ button {
 <div class="success" id="success">
   <div class="success-inner">
     <h2>I knew you’d say yes, baby.</h2>
-    <img src="yes.png">
-    <a href="yes.png" download="riddhi-doodle.png" class="download-btn">
+    <img src="yes.png" />
+    <a class="download-btn" href="yes.png" download>
       Download doodle 💌
     </a>
   </div>
@@ -242,66 +305,60 @@ const loader = document.getElementById("loader");
 const main = document.getElementById("main");
 const success = document.getElementById("success");
 
+const hydrateBtn = document.getElementById("hydrateBtn");
+const yesBtn = document.getElementById("yes");
+const noBtn = document.getElementById("no");
+const wrap = document.getElementById("btnWrap");
+const toast = document.getElementById("toast");
+const muteBtn = document.getElementById("muteBtn");
+
 const song2 = document.getElementById("song2");
 const songYes = document.getElementById("songYes");
 
-const yesBtn = document.getElementById("yes");
-const noBtn = document.getElementById("no");
-const muteBtn = document.getElementById("muteBtn");
-const toast = document.getElementById("toast");
-
-/* End loader */
-setTimeout(() => {
+/* HYDRATED → START MUSIC + ENTER */
+hydrateBtn.onclick = () => {
+  song2.volume = 0.45;
+  song2.play().catch(()=>{});
   loader.style.display = "none";
   main.style.display = "flex";
-}, 2500);
+};
 
-/* Unmute song2 on first interaction */
-function unlockAudio() {
-  song2.muted = false;
-  document.removeEventListener("click", unlockAudio);
-  document.removeEventListener("mousemove", unlockAudio);
-  document.removeEventListener("touchstart", unlockAudio);
-}
-document.addEventListener("click", unlockAudio);
-document.addEventListener("mousemove", unlockAudio);
-document.addEventListener("touchstart", unlockAudio);
-
-/* NO dodge */
-document.addEventListener("mousemove", e => {
+/* NO button movement */
+wrap.addEventListener("mousemove", e => {
   const r = noBtn.getBoundingClientRect();
-  if (Math.hypot(e.clientX-(r.left+r.width/2), e.clientY-(r.top+r.height/2)) < 60) {
-    noBtn.style.position = "fixed";
-    noBtn.style.left = Math.min(window.innerWidth-r.width-10, r.left+(Math.random()*30-15))+"px";
-    noBtn.style.top = Math.min(window.innerHeight-r.height-10, r.top+(Math.random()*30-15))+"px";
+  const dx = e.clientX - (r.left + r.width / 2);
+  const dy = e.clientY - (r.top + r.height / 2);
+  const d = Math.hypot(dx, dy);
+
+  if (d < 70) {
+    const a = Math.random() * Math.PI * 2;
+    const o = 14 + Math.random() * 10;
+    noBtn.style.transform = `translate(${Math.cos(a)*o}px, ${Math.sin(a)*o}px)`;
   }
 });
 
-/* NO click */
+wrap.addEventListener("mouseleave", () => {
+  noBtn.style.transform = "translate(0,0)";
+});
+
 noBtn.onclick = () => {
   toast.classList.add("show");
-  setTimeout(()=>toast.classList.remove("show"),1500);
+  setTimeout(()=>toast.classList.remove("show"),1400);
 };
 
 /* YES */
 yesBtn.onclick = () => {
   song2.pause();
-  song2.currentTime = 0;
-
   songYes.volume = 0.55;
   songYes.play().catch(()=>{});
-
   main.style.display = "none";
   success.style.display = "flex";
-  muteBtn.style.display = "block";
+  muteBtn.style.display = "flex";
 };
 
-/* Mute song1 */
-let muted = false;
 muteBtn.onclick = () => {
-  muted = !muted;
-  songYes.muted = muted;
-  muteBtn.textContent = muted ? "🔇" : "🔊";
+  songYes.muted = !songYes.muted;
+  muteBtn.textContent = songYes.muted ? "🔇" : "🔊";
 };
 </script>
 
